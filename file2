@@ -1,0 +1,59 @@
+public static void main(String[] args) throws IOException {
+int coded = 0;
+int counter = 0;
+int timeout = 0;
+boolean canConnect = false;
+Scanner in = new Scanner(System.in);
+System.out.print("Enter the file name:");
+String filename = in .nextLine();
+
+BufferedReader br = null;
+FileWriter fw = null;
+FileWriter ft = null;
+String f = "truefile.txt";
+String strLine = "";
+
+br = new BufferedReader(new FileReader(filename));
+fw = new FileWriter("wrongfile.txt");
+ft = new FileWriter(f);
+
+while ((strLine = br.readLine()) != null) {
+
+    System.out.println(strLine);
+    if (strLine.contentEquals("arrow-uee.com")) {
+        System.out.println("timeout");
+    } else {
+        try {
+            URL u = new URL("http://" + strLine);
+            HttpURLConnection huc = (HttpURLConnection) u.openConnection();
+            huc.setUseCaches(false);
+            huc.setConnectTimeout(timeout);
+            huc.setRequestMethod("GET");
+
+            coded = huc.getResponseCode();
+
+            if (coded == HttpURLConnection.HTTP_OK) {
+                canConnect = true;
+            }
+            int code = coded / 100;
+            if (code == 4 || code == 5 || coded == 303) {
+                fw.write(strLine + ":error:" + coded + "\n" + "\n");
+                System.out.println("domain is not ok error:" + coded);
+            } else {
+                ft.write(strLine + "\n" + "\n");
+                System.out.println("domain is ok:");
+            }
+            counter++;
+            System.out.println("total domain checked:" + counter);
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found");
+        } catch (IOException e) {
+            System.out.println("domain not exist fatal error");
+        }
+    }
+  ft.flush();
+   fw.flush();
+ }
+br.close();
+ft.close();
+fw.close();
