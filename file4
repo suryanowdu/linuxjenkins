@@ -1,0 +1,24 @@
+// Importing Stream class from
+// java.util package
+import java.util.stream.Stream;
+ 
+// Class
+public class GFG {
+ 
+    // Main driver method
+    public static void main(String[] args)
+    {
+ 
+        // Custom input string
+        String str
+            = " Geeks \n For \n Geeks \r Technical \r\n content \r writer \n Internship";
+ 
+        // Generating stream of lines from string
+        // using line method
+        Stream<String> lines = str.lines();
+ 
+        // print and display the output string
+        // using forEach and scope resolution operator
+        lines.forEach(System.out::println);
+    }
+}
